@@ -1,6 +1,16 @@
 import pandas
+from abc import ABC, abstractmethod
+# ABC is Abstract Base Class
 
 df = pandas.read_csv("hotels.csv", dtype={"id": str})
+
+
+# Synatactic Sugar = Simplified Syntax
+notTrue = "Hello" == "Hi"
+# a.k.a "hello".__eq__("Hi")
+# 1 + 2
+# 1 .__add__(2)
+print(notTrue)
 
 #Attributes can be
    # variables (instance vs class)
@@ -39,8 +49,20 @@ class Hotel:
     def get_hotel_count(cls, data):
         return len(data)
 
+    def __eq__(self, other):
+        if self.hotel_id == other.hotel_id:
+            return True
+        else:
+            return False
 
-class ReservationTicket:
+
+class Ticket(ABC):
+
+    @abstractmethod
+    def generate(self):
+        pass
+
+class ReservationTicket(Ticket):
     def __init__(self, customer_name, hotel_object):
         self.customer_name = customer_name
         self.hotel = hotel_object
@@ -73,6 +95,13 @@ class ReservationTicket:
     def convert(amount):
         return amount * 1.2
 
+
+# Example of inheritance whith overriding method
+class DigitalTicket(Ticket):
+    def generate(self):
+        print("Child Class")
+
+
 print(Hotel.get_hotel_count(data=df))
 
 hotel1 = Hotel(hotel_id=188)
@@ -85,3 +114,7 @@ print(ticket.generate())
 
 # Example of static method inside a class
 print(ReservationTicket.convert(10))
+
+ticket = DigitalTicket(customer_name="JOHN SMITH", hotel_object=hotel1)
+ticket.generate()
+
